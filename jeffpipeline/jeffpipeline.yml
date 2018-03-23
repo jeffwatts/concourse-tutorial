@@ -1,3 +1,15 @@
+DEFINITIONS:
+  task_configs:
+    - &busybox-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: busybox
+      inputs:
+        - name: myfork
+
+
 resource_types:
   - name: keyval
     type: docker-image
@@ -15,23 +27,31 @@ resources:
       branch: jeff/noodling
 
 jobs:
-
   - name: build
     plan:
       - get: myfork
-      - task: set-up-props
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: busybox
-          inputs:
-            - name: myfork
-          outputs:
-            - name: keyvalout
-          run:
-            path: myfork/jeffpipeline/set-up-props.sh
+      - aggregate:
+        - task: do-something
+          config:
+            <<: *busybox-config
+            run: {path: myfork/random-script.sh}
+        - task: set-up-props
+          config:
+            <<: *busybox-config
+            outputs:
+              - name: keyvalout
+            run:
+              path: myfork/jeffpipeline/set-up-props.sh
+        on_success:
+          task: success-task
+          config:
+            <<: *busybox-config
+            run: {path: myfork/success-script.sh}
+        on_failure:
+          task: fail-task
+          config:
+            <<: *busybox-config
+            run: {path: myfork/fail-script.sh}
       - put: keyval
         params:
           file: keyvalout/keyval.properties
@@ -44,11 +64,7 @@ jobs:
           - build
       - task: val-check
         config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: busybox
+          <<: *busybox-config
           inputs:
             - name: myfork
             - name: keyval
