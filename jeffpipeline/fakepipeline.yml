@@ -1,0 +1,28 @@
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+resources:
+  - name: keyval
+    type: keyval
+
+jobs:
+
+  - name: build
+    plan:
+      - task: build
+        file: tools/tasks/build/task.yml
+      - put: keyval
+        params:
+          file: keyvalout/keyval.properties
+
+  - name: test-deploy
+    plan:
+      - aggregate:
+        - get: keyval
+          passed:
+          - build
+      - task: test-deploy
+        file: tools/tasks/task.yml

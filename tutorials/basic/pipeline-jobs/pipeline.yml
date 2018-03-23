@@ -36,7 +36,6 @@ jobs:
 
 - name: job-show-date
   plan:
-  - get: resource-tutorial
   - get: resource-gist
     passed: [job-bump-date]
     trigger: true

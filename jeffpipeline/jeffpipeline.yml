@@ -1,0 +1,46 @@
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+resources:
+  - name: keyval
+    type: keyval
+
+jobs:
+
+  - name: build
+    plan:
+      - task: set-up-props
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+            - name: jeffpipeline
+          run:
+            path: './jeffpipeline/set-up-props.sh'
+      - put: keyval
+        params:
+          file: keyvalout/keyval.properties
+
+  - name: post-build
+    plan:
+      - get: keyval
+        passed:
+          - build
+      - task: val-check
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+            - name: jeffpipeline
+          run:
+            path: './jeffpipeline/read-props.sh'
+

@@ -3,32 +3,20 @@ resources:
 - name: tutorial
   type: git
   source:
-    uri: https://github.com/starkandwayne/concourse-tutorial.git
+    uri: https://github.com/jeffwatts/concourse-tutorial.git
     branch: develop
-- name: app
+- name: war
   type: git
   source:
-    uri: https://github.com/cloudfoundry-community/simple-go-web-app.git
-
-- name: deploy-web-app
-  type: cf
-  source:
-    api: ((cf-api))
-    username: ((cf-username))
-    password: ((cf-password))
-    organization: ((cf-organization))
-    space: ((cf-space))
-    skip_cert_check: true
+    uri: https://github.com/jeffwatts/war.git
 
 jobs:
-- name: deploy-app
-  public: true
-  serial: true
+- name: run-tests
   plan:
   - get: tutorial
-  - get: app
+  - get: war
     trigger: true
-  - task: web-app-tests
+  - task: tests
     config:
       platform: linux
 
@@ -38,12 +26,8 @@ jobs:
 
       inputs:
       - name: tutorial
-      - name: app
-        path: gopath/src/github.com/cloudfoundry-community/simple-go-web-app
+      - name: war
+        path: gopath/src/github.com/jeffwatts/war
 
       run:
         path: tutorial/tutorials/basic/job-inputs/task_run_tests.sh
-  - put: deploy-web-app
-    params:
-      manifest: app/manifest.yml
-      path: app
