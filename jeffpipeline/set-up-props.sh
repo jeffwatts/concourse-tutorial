@@ -2,8 +2,10 @@
 
 echo "Trying to set key-value properties"
 
-propsdir = "keyval"
-props_file = "${propsdir}/keyval.properties"
+propsdir="keyvalout"
+mkdir "$propsdir"
+
+props_file="${propsdir}/keyval.properties"
 if [ -d "$propsdir" ]; then
     touch "$props_file"
     echo "Setting values for next job in ${props_file}"
