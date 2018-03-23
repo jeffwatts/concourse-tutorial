@@ -51,6 +51,7 @@ jobs:
               repository: busybox
           inputs:
             - name: myfork
+            - name: keyval
           run:
             path: myfork/jeffpipeline/read-props.sh
 
