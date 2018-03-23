@@ -28,6 +28,8 @@ jobs:
               repository: busybox
           inputs:
             - name: myfork
+          outputs:
+            - name: keyvalout
           run:
             path: myfork/jeffpipeline/set-up-props.sh
       - put: keyval

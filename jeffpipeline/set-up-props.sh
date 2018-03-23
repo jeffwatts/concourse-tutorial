@@ -3,8 +3,6 @@
 echo "Trying to set key-value properties"
 
 propsdir="keyvalout"
-mkdir "$propsdir"
-
 props_file="${propsdir}/keyval.properties"
 if [ -d "$propsdir" ]; then
     touch "$props_file"
