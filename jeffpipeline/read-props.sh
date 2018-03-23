@@ -14,11 +14,12 @@ if [ -f "$props" ]; then
     done < "$props"
 else
     echo "No properties file found at ${props}"
+    ls -lR
 fi
 
 if [ -z "$BUILD_VERSION" ]; then
-    echo "BUILD_VERSION is set to ${BUILD_VERSION}. Success!"
-else
     echo "BUILD_VERSION is blank. Failure."
     exit -1
+else
+    echo "BUILD_VERSION is set to ${BUILD_VERSION}. Success!"
 fi
