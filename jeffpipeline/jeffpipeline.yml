@@ -8,10 +8,17 @@ resources:
   - name: keyval
     type: keyval
 
+  - name: myfork
+    type: git
+    source:
+      uri: https://github.com/jeffwatts/concourse-tutorial
+      branch: jeff/noodling
+
 jobs:
 
   - name: build
     plan:
+      - get: myfork
       - task: set-up-props
         config:
           platform: linux
@@ -20,15 +27,16 @@ jobs:
             source:
               repository: busybox
           inputs:
-            - name: jeffpipeline
+            - name: myfork
           run:
-            path: './jeffpipeline/set-up-props.sh'
+            path: myfork/jeffpipeline/set-up-props.sh
       - put: keyval
         params:
           file: keyvalout/keyval.properties
 
   - name: post-build
     plan:
+      - get: myfork
       - get: keyval
         passed:
           - build
@@ -40,7 +48,7 @@ jobs:
             source:
               repository: busybox
           inputs:
-            - name: jeffpipeline
+            - name: myfork
           run:
-            path: './jeffpipeline/read-props.sh'
+            path: myfork/jeffpipeline/read-props.sh
 
