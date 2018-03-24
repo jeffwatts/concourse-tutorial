@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 random=$(( ($RANDOM % 10) ))
 if [ "$random" -lt 5 ]; then

@@ -34,7 +34,8 @@ jobs:
         - task: do-something
           config:
             <<: *busybox-config
-            run: {path: myfork/random-script.sh}
+            run:
+              path: ./myfork/random-script.sh
         - task: set-up-props
           config:
             <<: *busybox-config

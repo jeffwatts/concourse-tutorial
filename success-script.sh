@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 echo "Congrats on all your success"
