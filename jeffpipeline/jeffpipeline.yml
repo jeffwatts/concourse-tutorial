@@ -30,32 +30,28 @@ jobs:
   - name: build
     plan:
       - get: myfork
-      - aggregate:
-        - task: do-something
-          config:
-            <<: *busybox-config
-            run:
-              path: ./myfork/random-script.sh
-        - task: set-up-props
+      - task: something-random
+        config:
+          <<: *busybox-config
+          run: {path: myfork/jeffpipeline/random-script.sh}
+        on_success:
+          task: success-task-props
           config:
             <<: *busybox-config
             outputs:
               - name: keyvalout
-            run:
-              path: myfork/jeffpipeline/set-up-props.sh
-        on_success:
-          task: success-task
-          config:
-            <<: *busybox-config
-            run: {path: myfork/success-script.sh}
+            run: {path: myfork/jeffpipeline/success-script-props.sh}
         on_failure:
-          task: fail-task
+          task: fail-task-props
           config:
             <<: *busybox-config
-            run: {path: myfork/fail-script.sh}
-      - put: keyval
-        params:
-          file: keyvalout/keyval.properties
+            outputs:
+              - name: keyvalout
+            run: {path: myfork/jeffpipeline/fail-script-props.sh}
+        ensure:
+          put: keyval
+          params:
+            file: keyvalout/keyval.properties
 
   - name: post-build
     plan:
