@@ -57,6 +57,7 @@ jobs:
     plan:
       - get: myfork
       - get: keyval
+        trigger: true
         passed:
           - build
       - task: val-check
