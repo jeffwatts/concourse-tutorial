@@ -1,7 +1,8 @@
 #!/bin/sh
 
+echo `ls -lp .git/`
 echo ".git/ref is ..."
-echo `cat concourse-tutorial/.git/ref`
+echo `cat .git/ref`
 
 revision=`git rev-parse HEAD`
 
