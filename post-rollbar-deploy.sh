@@ -1,10 +1,8 @@
 #!/bin/sh
 
-echo `ls -lp .git/`
-echo ".git/ref is ..."
-echo `cat .git/ref`
+echo `cat .git/HEAD`
 
-revision=`git rev-parse HEAD`
+revision=`cat .git/ref`
 
 curl --request POST \
   --url https://api.rollbar.com/api/1/deploy/ \
