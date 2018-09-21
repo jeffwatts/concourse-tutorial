@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo `cat .git/HEAD`
-
 revision=`cat .git/ref`
 
 curl --request POST \
